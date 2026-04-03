@@ -1,9 +1,15 @@
 # =============================================================================
-# PONG - Your First Pygame Game!
+# PONG - Part 2
 # =============================================================================
 # Player 1 (Left):  W = up, S = down
 # Player 2 (Right): UP arrow = up, DOWN arrow = down
 # =============================================================================
+
+# ======================== NEW IN PART 2 ========================
+#   1. Win condition  -- first to 3 points wins
+#   2. Post-point pause -- ball holds for 1 second after each score
+#   3. Game over screen -- shows winner and a SPACE-to-restart prompt
+# ===============================================================
 
 import pygame
 
@@ -21,8 +27,14 @@ clock = pygame.time.Clock()
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
-# Font for drawing the score
-font = pygame.font.Font(None, 64)
+# Fonts
+large_font = pygame.font.Font(None, 64)  # renamed from 'font' in Part 1
+small_font = pygame.font.Font(None, 36)  # <-- NEW: smaller font for the restart message
+
+# --- NEW IN PART 2: game state ---
+WINNING_SCORE = 3   # <-- NEW: game ends when someone reaches this score
+game_over = False   # <-- NEW: stops input and movement when True
+pause_until = 0     # <-- NEW: timestamp; ball waits until this passes
 
 # --- Create game objects using Rectangles ---
 # pygame.Rect(x, y, width, height)
@@ -45,20 +57,6 @@ ball_speed_y = 4
 score1 = 0
 score2 = 0
 
-# How many points to win the game
-WINNING_SCORE = 3
-
-# Is the game over?
-game_over = False
-
-# Smaller font for the restart message
-small_font = pygame.font.Font(None, 36)
-
-# Pause timer -- when set, the ball waits before moving again.
-# pygame.time.get_ticks() returns milliseconds since pygame.init(),
-# so we can use it to measure how much time has passed.
-pause_until = 0
-
 # --- Game Loop ---
 # This runs 60 times per second until the player quits.
 # Every loop: check input, move things, draw everything.
@@ -71,7 +69,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        # KEYDOWN fires once when a key is first pressed
+        # ===== NEW IN PART 2: press SPACE to restart after game over =====
+        # KEYDOWN fires once when a key is first pressed (unlike get_pressed)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and game_over:
                 # Reset everything for a new game
@@ -88,7 +87,7 @@ while running:
     # -- Check which keys are held down --
     keys = pygame.key.get_pressed()
 
-    # Only allow input and ball movement if the game is not over
+    # ===== NEW IN PART 2: freeze paddle input once game is over =====
     if not game_over:
 
         # Player 1: W and S
@@ -103,7 +102,7 @@ while running:
         if keys[pygame.K_DOWN] and paddle2.bottom < 600:
             paddle2.y += 5
 
-    # Only move the ball if the pause is over and game is not over
+    # ===== NEW IN PART 2: hold ball during post-point pause and after game over =====
     if not game_over and pygame.time.get_ticks() >= pause_until:
 
         # -- Move the ball --
@@ -125,20 +124,22 @@ while running:
             score2 += 1
             ball.center = (400, 300)
             ball_speed_x = -ball_speed_x
+            # ===== NEW IN PART 2: check win, otherwise start 1-second pause =====
             if score2 >= WINNING_SCORE:
                 game_over = True
             else:
-                pause_until = pygame.time.get_ticks() + 1000  # Wait 1 second (1000 ms)
+                pause_until = pygame.time.get_ticks() + 1000  # 1000 ms = 1 second
 
         # Ball goes off right side - Player 1 scores
         if ball.left >= 800:
             score1 += 1
             ball.center = (400, 300)
             ball_speed_x = -ball_speed_x
+            # ===== NEW IN PART 2: check win, otherwise start 1-second pause =====
             if score1 >= WINNING_SCORE:
                 game_over = True
             else:
-                pause_until = pygame.time.get_ticks() + 1000  # Wait 1 second (1000 ms)
+                pause_until = pygame.time.get_ticks() + 1000  # 1000 ms = 1 second
 
     # -- Draw everything --
     screen.fill(BLACK)
@@ -147,17 +148,17 @@ while running:
     pygame.draw.rect(screen, WHITE, ball)
 
     # Draw scores
-    text1 = font.render(str(score1), True, WHITE)
-    text2 = font.render(str(score2), True, WHITE)
+    text1 = large_font.render(str(score1), True, WHITE)
+    text2 = large_font.render(str(score2), True, WHITE)
     screen.blit(text1, (200, 20))
     screen.blit(text2, (580, 20))
 
-    # If the game is over, show the winner and restart message
+    # ===== NEW IN PART 2: overlay winner text and restart prompt =====
     if game_over:
         if score1 >= WINNING_SCORE:
-            win_text = font.render("P1 Wins!", True, WHITE)
+            win_text = large_font.render("P1 Wins!", True, WHITE)
         else:
-            win_text = font.render("P2 Wins!", True, WHITE)
+            win_text = large_font.render("P2 Wins!", True, WHITE)
         screen.blit(win_text, (400 - win_text.get_width() // 2, 250))
 
         restart_text = small_font.render("Press SPACE to restart", True, WHITE)
