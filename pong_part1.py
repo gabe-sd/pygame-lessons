@@ -26,7 +26,6 @@ font = pygame.font.Font(None, 64)
 
 # --- Create game objects using Rectangles ---
 # pygame.Rect(x, y, width, height)
-# x goes left to right, y goes top to bottom
 
 # Left paddle
 paddle1 = pygame.Rect(30, 250, 15, 90)
@@ -37,7 +36,7 @@ paddle2 = pygame.Rect(755, 250, 15, 90)
 # Ball (starts in the center)
 ball = pygame.Rect(392, 292, 15, 15)
 
-# Ball speed (how many pixels it moves each frame)
+# Ball speed (pixels per frame)
 ball_speed_x = 4
 ball_speed_y = 4
 
@@ -51,7 +50,6 @@ score2 = 0
 
 running = True
 while running:
-
     # -- Check for events --
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -105,7 +103,7 @@ while running:
     pygame.draw.rect(screen, WHITE, ball)
 
     # Draw scores
-    text1 = font.render(str(score1), True, WHITE)
+    text1 = font.render(str(score1), True, WHITE) #(255, 255, 255)
     text2 = font.render(str(score2), True, WHITE)
     screen.blit(text1, (200, 20))
     screen.blit(text2, (580, 20))
