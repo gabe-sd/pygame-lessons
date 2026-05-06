@@ -59,7 +59,7 @@ while running:
     keys = pygame.key.get_pressed()
 
     # Player 1: W and S
-    if keys[pygame.K_w] and paddle1.top > 0:
+    if keys[pygame.K_w]:
         paddle1.y -= 5
     if keys[pygame.K_s] and paddle1.bottom < 600:
         paddle1.y += 5
