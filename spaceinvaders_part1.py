@@ -1,7 +1,7 @@
 # =============================================================================
 # SPACE INVADERS - Part 1
 # =============================================================================
-# LEFT / RIGHT arrows = move the ship
+# A / D = move the ship
 # SPACE = shoot (one bullet on screen at a time)
 # Hit the enemies with your bullets. Once an enemy is shot it does not come back.
 # =============================================================================
@@ -76,9 +76,9 @@ while running:
     # -- Check which keys are held down --
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_LEFT] and player.left > 0:
+    if keys[pygame.K_a] and player.left > 0:
         player.x -= 5
-    if keys[pygame.K_RIGHT] and player.right < 600:
+    if keys[pygame.K_d] and player.right < 600:
         player.x += 5
 
     # -- Move the bullet --

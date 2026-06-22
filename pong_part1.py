@@ -1,13 +1,8 @@
-# =============================================================================
 # PONG - Part 1
-# =============================================================================
-# Player 1 (Left):  W = up, S = down
-# Player 2 (Right): UP arrow = up, DOWN arrow = down
-# =============================================================================
 
 import pygame
 
-# Start pygame
+# Setup pygame
 pygame.init()
 
 # Create the game window
@@ -33,10 +28,8 @@ paddle1 = pygame.Rect(30, 250, 15, 90)
 # Right paddle
 paddle2 = pygame.Rect(755, 250, 15, 90)
 
-# Ball (starts in the center)
+# Ball
 ball = pygame.Rect(392, 292, 15, 15)
-
-# Ball speed (pixels per frame)
 ball_speed_x = 4
 ball_speed_y = 4
 
@@ -45,17 +38,16 @@ score1 = 0
 score2 = 0
 
 # --- Game Loop ---
-# This runs 60 times per second until the player quits.
-# Every loop: check input, move things, draw everything.
+# Runs 60 times per second
 
 running = True
 while running:
-    # -- Check for events --
+    # events check
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    # -- Check which keys are held down --
+    # key press check
     keys = pygame.key.get_pressed()
 
     # Player 1: W and S
